@@ -3,7 +3,7 @@
 #![allow(unused_variables)]
 
 use clap::{Arg, ArgAction, Command};
-use ::hvm::{ast, cmp, hvm};
+use ::hvm::{ast, cmp, hvm, jit};
 use std::fs;
 use std::io::Write;
 use std::path::PathBuf;
@@ -46,6 +46,15 @@ fn main() {
           .long("io")
           .action(ArgAction::SetTrue)
           .help("Run with IO enabled")))
+    .subcommand(
+      Command::new("run-jit")
+        .about("Interprets a file (using the Cranelift JIT)")
+        .arg(Arg::new("file").required(true))
+        .arg(Arg::new("io")
+            .long("io")
+            .action(ArgAction::SetTrue)
+            .help("Run with IO enabled"))
+    )
     .subcommand(
       Command::new("gen-c")
         .about("Compiles a file with IO (to standalone C)")
@@ -96,6 +105,15 @@ fn main() {
       }
       #[cfg(not(feature = "cuda"))]
       println!("CUDA runtime not available!\n If you've installed CUDA and nvcc after HVM, please reinstall HVM.");
+    }
+    Some(("run-jit", sub_matches)) => {
+      let file = sub_matches.get_one::<String>("file").expect("required");
+      let code = fs::read_to_string(file).expect("Unable to read file");
+      let book = ast::Book::parse(&code).unwrap_or_else(|er| panic!("{}",er)).build();
+      #[cfg(feature = "cranelift")]
+      jit::run(&book);
+      #[cfg(not(feature = "cranelift"))]
+      println!("Cranelift jit not available!\n");
     }
     Some(("gen-c", sub_matches)) => {
       // Reads book from file
