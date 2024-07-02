@@ -27,7 +27,7 @@ cc = "1.0"
 num_cpus = "1.0"
 
 [features]
-default = []
+default = ["cranelift"]
 # C and CUDA features are determined during build
 c = []
 cuda = []
