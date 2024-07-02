@@ -1,0 +1,2 @@
+load("@crates//:defs.bzl", "all_crate_deps")
+

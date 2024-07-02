@@ -1,0 +1,19 @@
+load("@crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
+
+rust_library(
+    name = "hvm_support",
+    srcs = [
+        "ast.rs",
+        "cmp.rs",
+        "hvm.rs",
+        "lib.rs"
+    ],
+    deps = all_crate_deps(normal = True)
+)
+
+rust_binary(
+    name = "hvm",
+    srcs = ["main.rs"],
+    deps = [":hvm_support"] + all_crate_deps(normal = True)
+)
