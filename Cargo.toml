@@ -31,7 +31,7 @@ default = []
 # C and CUDA features are determined during build
 c = []
 cuda = []
-cranelift = ["dep:cranelift", "dep:cranelift-jit", "dep:cranelift-module", "dep:cranelift-native", "dep:cranelift-object"]
+cranelift = ["dep:cranelift", "dep:cranelift-jit", "dep:cranelift-module", "dep:cranelift-native"]
 
 [dev-dependencies]
 insta = { version = "1.39.0", features = ["glob"] }
