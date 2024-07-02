@@ -35,3 +35,7 @@ cranelift = ["dep:cranelift", "dep:cranelift-jit", "dep:cranelift-module", "dep:
 
 [dev-dependencies]
 insta = { version = "1.39.0", features = ["glob"] }
+
+# Compile dependencies with optimization to improve iteration speed
+[profile.dev.package."*"]
+opt-level = "s"
